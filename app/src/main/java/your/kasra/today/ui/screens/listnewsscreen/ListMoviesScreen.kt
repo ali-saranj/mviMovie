@@ -13,6 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,21 +60,30 @@ private fun PreviewListNewsScreen() {
 fun ListMoviesContent(
     modifier: Modifier = Modifier,
     listMovies: List<Movie>,
-    onclick: (id: Int) -> Unit = {}
+    onclick: (id: Int) -> Unit = {},
+    onLoading: (loading: Boolean) -> Unit = {}
 ) {
-    var
+    var loading by remember { mutableStateOf(false) }
+
     LazyVerticalGrid(
         modifier = Modifier.background(color = Color(0xFF151C25)),
         columns = GridCells.Fixed(3),
         content = {
             items(listMovies) { movie ->
-                if (movie.id == listMovies.last().id){
-
+                if (movie.id == listMovies.last().id) {
+                    loading = true
+                } else {
+                    CardMovie(
+                        modifier = Modifier.padding(8.dp),
+                        movie = movie,
+                        onClick = { onclick(it) })
+                    loading = false
                 }
-                CardMovie(
-                    modifier = Modifier.padding(8.dp),
-                    movie = movie,
-                    onClick = { onclick(it) })
+            }
+            item {
+                if (loading) {
+                    CircularProgressIndicator() // Show loading indicator
+                }
             }
         })
 
