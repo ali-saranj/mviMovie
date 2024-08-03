@@ -120,6 +120,10 @@ dependencies {
     //Material3 Icon
     implementation(libs.androidx.material.icons.extended)
 
+    //Paging
+    implementation (libs.androidx.paging.runtime)
+    implementation (libs.androidx.paging.compose)
+
 
     // Compose
     implementation(libs.androidx.compose.ui)
