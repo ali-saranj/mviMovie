@@ -27,12 +27,13 @@ class ListMoviesViewModel @Inject constructor(val newsRepository: MoviesReposito
 
     }
 
+
     private fun loadNews() = viewModelScope.launch(Dispatchers.IO){
         _state.value = _state.value.copy(isLoading = true)
         newsRepository.listMovies().collectLatest {
              when(it){
                  is Resource.Error -> _state.value = _state.value.copy(isLoading = false,isError = true, errorMessage = it.message)
-                 is Resource.Success -> _state.value = _state.value.copy(isLoading = false, isError = false, movieList = it.data, isSuccess = true)
+                 is Resource.Success -> _state.value = _state.value.copy(isLoading = false, isError = false, movieList = MutableStateFlow(it.data), isSuccess = true)
              }
          }
     }
